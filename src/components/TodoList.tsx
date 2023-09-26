@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { removeTodos } from '../redux/reducerTodo';
 import { RootState } from '../redux/store';
 import { TodoItem } from './TodoItem';
 
@@ -17,7 +18,7 @@ export const TodoList = () => {
   return (
     <StyledList>
       {todos.map((item: any) => {
-        return <TodoItem key={item.id} item={item} />;
+        return <TodoItem key={item.id} item={item} removeTodo={removeTodos} />;
       })}
     </StyledList>
   );

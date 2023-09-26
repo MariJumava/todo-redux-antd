@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export interface ITodo {
-  id?: number;
+  id: number;
   text: string;
   completed?: boolean;
 }
@@ -24,8 +24,11 @@ const todoReducer = createSlice({
         } as ITodo,
       }),
     },
+    removeTodos: (state, action: PayloadAction<number>) => {
+      return state.filter((item: { id: number }) => item.id !== action.payload);
+    },
   },
 });
 
-export const { addTodos } = todoReducer.actions;
+export const { addTodos, removeTodos } = todoReducer.actions;
 export const reducer = todoReducer.reducer;
