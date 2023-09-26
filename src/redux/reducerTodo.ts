@@ -4,9 +4,11 @@ export interface ITodo {
   id: number;
   text: string;
   completed?: boolean;
+  date: string;
 }
 
-const initialState = [] as ITodo[];
+const savedTodos = localStorage.getItem('todos');
+const initialState = savedTodos ? JSON.parse(savedTodos) : ([] as ITodo[]);
 
 const todoReducer = createSlice({
   name: 'todos',
@@ -21,14 +23,29 @@ const todoReducer = createSlice({
           id: Math.floor(Math.random() * 1000),
           text,
           completed: false,
+          date: new Date().toISOString(),
         } as ITodo,
       }),
     },
     removeTodos: (state, action: PayloadAction<number>) => {
       return state.filter((item: { id: number }) => item.id !== action.payload);
     },
+    updateTodos: (
+      state,
+      action: PayloadAction<{ text: string; id: number }>,
+    ) => {
+      return state.map((todo: { id: number }) => {
+        if (todo.id === action.payload.id) {
+          return {
+            ...todo,
+            text: action.payload.text,
+          };
+        }
+        return todo;
+      });
+    },
   },
 });
 
-export const { addTodos, removeTodos } = todoReducer.actions;
+export const { addTodos, removeTodos, updateTodos } = todoReducer.actions;
 export const reducer = todoReducer.reducer;

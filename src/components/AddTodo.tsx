@@ -7,6 +7,11 @@ export const AddTodo = () => {
   const [todo, setTodo] = useState('');
   const dispatch = useDispatch<AppDispatch>();
 
+  const addTodo = (text: string) => {
+    dispatch(addTodos(text));
+    setTodo('');
+  };
+
   return (
     <div>
       <input
@@ -16,14 +21,7 @@ export const AddTodo = () => {
         }
         value={todo}
       />
-      <button
-        onClick={() => {
-          dispatch(addTodos(todo));
-          setTodo('');
-        }}
-      >
-        +
-      </button>
+      <button onClick={() => addTodo(todo)}>+</button>
     </div>
   );
 };
