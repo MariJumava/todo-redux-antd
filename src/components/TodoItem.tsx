@@ -12,8 +12,15 @@ export const TodoItem = (props: {
   };
   removeTodo: ActionCreatorWithPayload<number, 'todos/removeTodos'>;
   updateTodo: ActionCreatorWithPayload<any, 'todos/updateTodos'>;
+  completeTodo: ActionCreatorWithPayload<
+    {
+      completed: boolean;
+      id: number;
+    },
+    'todos/completeTodos'
+  >;
 }) => {
-  const { item, removeTodo, updateTodo } = props;
+  const { item, removeTodo, updateTodo, completeTodo } = props;
 
   const dispatch = useDispatch<AppDispatch>();
   const [disabled, setDisabled] = useState(true);
@@ -34,6 +41,7 @@ export const TodoItem = (props: {
       setDisabled(true);
     }
   };
+
   return (
     <li key={item.id}>
       <span>{item.text}</span>
@@ -47,6 +55,16 @@ export const TodoItem = (props: {
         }
       />
       <button onClick={() => changeFocus()}>change</button>
+      {item.completed === false && (
+        <button
+          onClick={() => {
+            dispatch(completeTodo({ completed: !item.completed, id: item.id }));
+          }}
+          style={{ color: 'green' }}
+        >
+          0
+        </button>
+      )}
       <button
         onClick={() => {
           dispatch(removeTodo(item.id));
@@ -55,6 +73,7 @@ export const TodoItem = (props: {
       >
         X
       </button>
+      {item.completed && <div>done</div>}
     </li>
   );
 };

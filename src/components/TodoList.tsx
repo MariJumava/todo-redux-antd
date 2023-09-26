@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { removeTodos, updateTodos } from '../redux/reducerTodo';
+import { removeTodos, updateTodos, completeTodos } from '../redux/reducerTodo';
 import { RootState } from '../redux/store';
 import { TodoItem } from './TodoItem';
 
@@ -15,6 +15,7 @@ const StyledList = styled.ul`
 `;
 
 export const TodoList = () => {
+  const [sort, setSort] = useState('active');
   const todos = useSelector((state: RootState) => state);
 
   const saveToLocalStorage = (todosLocal: any) => {
@@ -26,17 +27,78 @@ export const TodoList = () => {
   }, [todos]);
 
   return (
-    <StyledList>
-      {todos.map((item: any) => {
-        return (
-          <TodoItem
-            key={item.id}
-            item={item}
-            updateTodo={updateTodos}
-            removeTodo={removeTodos}
-          />
-        );
-      })}
-    </StyledList>
+    <div>
+      <div>
+        <button onClick={() => setSort('all')}>All todos</button>
+        <button onClick={() => setSort('active')}>Active</button>
+        <button onClick={() => setSort('completed')}>Completed</button>
+      </div>
+      <StyledList>
+        {todos.length > 0 && sort === 'active'
+          ? todos.map(
+              (item: {
+                completed: boolean;
+                id: number;
+                text: string;
+                date: string;
+              }) => {
+                return (
+                  item.completed === false && (
+                    <TodoItem
+                      key={item.id}
+                      item={item}
+                      removeTodo={removeTodos}
+                      updateTodo={updateTodos}
+                      completeTodo={completeTodos}
+                    />
+                  )
+                );
+              },
+            )
+          : null}
+        {todos.length > 0 && sort === 'completed'
+          ? todos.map(
+              (item: {
+                completed: boolean;
+                id: number;
+                text: string;
+                date: string;
+              }) => {
+                return (
+                  item.completed === true && (
+                    <TodoItem
+                      key={item.id}
+                      item={item}
+                      removeTodo={removeTodos}
+                      updateTodo={updateTodos}
+                      completeTodo={completeTodos}
+                    />
+                  )
+                );
+              },
+            )
+          : null}
+        {todos.length > 0 && sort === 'all'
+          ? todos.map(
+              (item: {
+                completed: boolean;
+                id: number;
+                text: string;
+                date: string;
+              }) => {
+                return (
+                  <TodoItem
+                    key={item.id}
+                    item={item}
+                    removeTodo={removeTodos}
+                    updateTodo={updateTodos}
+                    completeTodo={completeTodos}
+                  />
+                );
+              },
+            )
+          : null}
+      </StyledList>
+    </div>
   );
 };
