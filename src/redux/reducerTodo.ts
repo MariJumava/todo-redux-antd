@@ -52,7 +52,7 @@ const todoReducer = createSlice({
         if (todo.id === action.payload.id) {
           return {
             ...todo,
-            completed: true,
+            completed: action.payload.completed,
           };
         }
         return todo;
